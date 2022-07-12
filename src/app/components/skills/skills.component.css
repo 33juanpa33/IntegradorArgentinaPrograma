@@ -1,0 +1,12 @@
+.row{
+    padding: 40px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.habilidad{
+    flex: 1 1 200px;
+}
+h1{
+    background-color: #e2f4f1;
+}

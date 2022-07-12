@@ -1,0 +1,36 @@
+.container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+#logo {
+    width: 120px;
+}
+#facebook, #github, #instagram, #linkedin{
+    max-width: 30px;
+    margin-right: 5px;
+}
+.seccion-derecha{
+    align-items: center;
+    display: flex;
+    float: right;
+    margin: 23px 10px;
+}
+h1{
+    display: inline;
+    font-size: 30px;
+    font-family: 'Montserrat', sans-serif;
+}
+a{
+    text-decoration: none;
+    color: white;
+    margin-left: 10px;
+}
+.btn{
+    border-width: 0.1rem;
+}
+.redes{
+    max-height: 30px;
+    overflow: hidden;
+}
