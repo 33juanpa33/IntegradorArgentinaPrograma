@@ -1,17 +1,148 @@
-<div class="row g-0">
-    <h1>Educación</h1>
-    <div class="col-lg-11">
-        <ul>
-            <li>
-                <h2>ISFDyT N°166 - Tandil</h2> - <h3>()años</h3>
-            </li>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit, quidem? Esse earum alias voluptatumiste, consequuntur dolores qui dolore temporibus in delectus odit ut quidem nisi ducimus molestiae verovoluptates.</p>
-        </ul>
-        <ul>
-            <li>
-                <h2>UNICEN - Tandil</h2> - <h3>()años</h3>
-            </li>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit, quidem? Esse earum alias voluptatumiste, consequuntur dolores qui dolore temporibus in delectus odit ut quidem nisi ducimus molestiae verovoluptates.</p>
-        </ul>
+<div class="row edu main-container">
+    <div class="text-center">
+        <button type="button" class="btn btn-primary" (click)="onOpenModal('agregar')">
+            <a class="nav-link" style="color:white">
+                Crear Educación <span class="sr-only"> (current) </span>
+            </a>
+        </button>
+    </div>
+    <div id="main-container">
+        <h1>Educación</h1>
+        <div class="col-lg-11" *ngFor="let educacion of educaciones">
+            <div class="container">
+                <ul>
+                    <li>
+                        <h2>{{educacion.tituloEdu}}</h2> - <h3>( {{educacion.fechaInicioEdu}} -
+                            {{educacion.fechaFinEdu}} )</h3>
+                        <div class="col text-end">
+                            <a (click)="onOpenModal('modificar',educacion)" class="btn btn-success tooltips"
+                                data-placement="top" data-toogle="tooltip" data-original-title="Editar">
+                                <i class="fa fa-pencil"></i></a>
+                            <a (click)="onOpenModal('borrar',educacion)" class="btn btn-danger tooltips"
+                                data-placement="top" data-toogle="tooltip" data-original-title="Borrar">
+                                <i class="fa fa-trash-o"></i>
+                            </a>
+                            <!-- <a href="" class="btn btn-danger tooltips" data-placement="top" data-toogle="tooltip"
+                        data-original-title="Eliminar"><i class="fa fa-trash"></i></a> -->
+                        </div>
+                    </li>
+                    <p>{{educacion.descripcionEdu}}</p>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
+
+<!-- modal para agregar educacion -->
+<div class="modal fade" id="agregarEducacionModal" tabindex="-1" role="dialog"
+    aria-labelledby="agregarEducacionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="agregarEducacionModalLabel">Nueva Educación</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="close">
+                    <span aria-hidden="true"> &times; </span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #addForm="ngForm" (ngSubmit)="onAddEducacion(addForm)">
+                    <div class="form-group">
+                        <label for="tituloEdu">Título:</label>
+                        <input type="text" ngModel name="tituloEdu" class="form-control" id="tituloEdu"
+                            placeholder="Titulo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaInicioEdu" class="form-control">Año de inicio:</label>
+                        <input type="text" ngModel name="fechaInicioEdu" class="form-control" id="fechaInicioEdu"
+                            placeholder="Año de inicio" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaFinEdu" class="form-control">Año de finalización:</label>
+                        <input type="text" ngModel name="fechaFinEdu" class="form-control" id="fechaFinEdu"
+                            placeholder="Año de finalizacion" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcionEdu" class="form-control">Descripción:</label>
+                        <textarea type="text" ngModel name="descripcionEdu" class="form-control" id="descripcionEdu"
+                            placeholder="Descripcion" required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="add-educacion-form" class="btn btn-secondary"
+                            data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Cargar Educación</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal para Editar educacion -->
+<div class="modal fade" id="modificarEducacionModal" tabindex="-1" role="dialog"
+    aria-labelledby="modificarEducacionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modificarEducacionModalLabel">Modificar Educación: {{
+                    modificarEducacion?.tituloEdu }}</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="close">
+                    <span aria-hidden="true"> &times; </span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #editForm="ngForm">
+                    <div class="form-group">
+                        <label for="tituloEdu">Título:</label>
+                        <input type="text" ngModel="{{ modificarEducacion?.tituloEdu }}" name="tituloEdu"
+                            class="form-control" id="tituloEdu" placeholder="Titulo" required>
+                    </div>
+                    <input type="hidden" ngModel="{{ modificarEducacion?.idEdu }}" name="idEdu" class="form-control"
+                        id="idEdu" placeholder="">
+                    <div class="form-group">
+                        <label for="fechaInicioEdu" class="col-form-label">Año de inicio:</label>
+                        <input type="text" ngModel="{{ modificarEducacion?.fechaInicioEdu }}" name="fechaInicioEdu"
+                            class="form-control" id="fechaInicioEdu" placeholder="Año de inicio" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaFinEdu" class="col-form-label">Año de finalización:</label>
+                        <input type="text" ngModel="{{ modificarEducacion?.fechaFinEdu }}" name="fechaFinEdu"
+                            class="form-control" id="fechaFinEdu" placeholder="Año de finalizacion" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcionEdu" class="col-form-label">Descripción:</label>
+                        <textarea type="text" ngModel="{{ modificarEducacion?.descripcionEdu }}" name="descripcionEdu"
+                            class="form-control" id="descripcionEdu" placeholder="Descripcion" required></textarea>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" id="" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button (click)="onUpdateEducacion(editForm.value)" data-bs-dismiss="modal"
+                            class="btn btn-primary">Modificar Educación</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal para Eliminar educacion -->
+<div data-bs-toggle="modale" data-bs-target="#borrarModalLabel" class="modal fade" id="borrarEducacionModal"
+    tabindex="-1" role="dialog" aria-labelledby="borrarEducacionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="borrarEducacionModalLabel">Borrar Educación</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="close">
+                    <span aria-hidden="true"> &times; </span>
+                </button>
+            </div>
+            <p>
+                ¿Estas seguro que deseas borrar la educacion {{ borrarEducacion?.tituloEdu }}
+            </p>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                <button  class="btn btn-primary" data-bs-dismiss="modal" (click)="onDeleteEducacion(borrarEducacion.idEdu)">Si</button>
+            </div>
+        </div>
+    </div>
+</div>
+
