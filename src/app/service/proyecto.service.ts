@@ -8,7 +8,7 @@ import { Proyecto } from '../model/proyecto.model';
   providedIn: 'root'
 })
 export class ProyectoService {
-  private apiServiceUrl = environment.apiBaseUrl;
+  private apiServiceUrl = 'https://portfolioalfonso.herokuapp.com';
 
   constructor(private http:HttpClient) { }
 
