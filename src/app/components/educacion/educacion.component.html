@@ -1,12 +1,12 @@
-<div class="row edu main-container">
-    <div class="text-center">
+<div class="row g-0 edu main-container">
+    <div *ngIf="userLogged|async as user" class="text-center">
         <button type="button" class="btn btn-primary" (click)="onOpenModal('agregar')">
             <a class="nav-link" style="color:white">
                 Crear Educación <span class="sr-only"> (current) </span>
             </a>
         </button>
     </div>
-    <div id="main-container">
+    <div id="main-container" class="row g-0">
         <h1>Educación</h1>
         <div class="col-lg-11" *ngFor="let educacion of educaciones">
             <div class="container">
@@ -14,7 +14,7 @@
                     <li>
                         <h2>{{educacion.tituloEdu}}</h2> - <h3>( {{educacion.fechaInicioEdu}} -
                             {{educacion.fechaFinEdu}} )</h3>
-                        <div class="col text-end">
+                        <div *ngIf="userLogged|async as user" class="col text-end">
                             <a (click)="onOpenModal('modificar',educacion)" class="btn btn-success tooltips"
                                 data-placement="top" data-toogle="tooltip" data-original-title="Editar">
                                 <i class="fa fa-pencil"></i></a>

@@ -1,5 +1,5 @@
 export class Experiencia {
-    idEdu?: number;
+    idExp?: number;
     tituloExp: string;
     fechaInicioExp: string;
     fechaFinExp: string;

@@ -1,23 +1,147 @@
-<div class="row g-0">
-    <h1>Experiencia laboral</h1>
-    <div class="col-lg-11">
-        <ul>
-            <li>
-                <h2>Trabajo 1</h2> - <h3>()años</h3>
-            </li>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit, quidem? Esse earum alias voluptatumiste, consequuntur dolores qui dolore temporibus in delectus odit ut quidem nisi ducimus molestiae verovoluptates.</p>
-        </ul>
-        <ul>
-            <li>
-                <h2>Trabajo 2</h2> - <h3>()años</h3>
-            </li>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit, quidem? Esse earum alias voluptatumiste, consequuntur dolores qui dolore temporibus in delectus odit ut quidem nisi ducimus molestiae verovoluptates.</p>
-        </ul>
-        <ul>
-            <li>
-                <h2>Trabajo 3</h2> - <h3>()años</h3>
-            </li>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit, quidem? Esse earum alias voluptatumiste, consequuntur dolores qui dolore temporibus in delectus odit ut quidem nisi ducimus molestiae verovoluptates.</p>
-        </ul>
+<div class="row g-0 edu main-container">
+    <div *ngIf="userLogged|async as user" class="text-center">
+        <button type="button" class="btn btn-primary" (click)="onOpenModal('agregar')">
+            <a class="nav-link" style="color:white">
+                Crear Experiencia Laboral <span class="sr-only"> (current) </span>
+            </a>
+        </button>
+    </div>
+    <div id="main-container" class="row g-0">
+        <h1>Experiencia Laboral</h1>
+        <div class="col-lg-11" *ngFor="let experiencia of experiencias">
+            <div class="container">
+                <ul>
+                    <li>
+                        <h2>{{experiencia.tituloExp}}</h2> - <h3>( {{experiencia.fechaInicioExp}} -
+                            {{experiencia.fechaFinExp}} )</h3>
+                        <div *ngIf="userLogged|async as user" class="col text-end">
+                            <a (click)="onOpenModal('modificar',experiencia)" class="btn btn-success tooltips"
+                                data-placement="top" data-toogle="tooltip" data-original-title="Editar">
+                                <i class="fa fa-pencil"></i></a>
+                            <a (click)="onOpenModal('borrar',experiencia)" class="btn btn-danger tooltips"
+                                data-placement="top" data-toogle="tooltip" data-original-title="Borrar">
+                                <i class="fa fa-trash-o"></i>
+                            </a>
+                            <!-- <a href="" class="btn btn-danger tooltips" data-placement="top" data-toogle="tooltip"
+                        data-original-title="Eliminar"><i class="fa fa-trash"></i></a> -->
+                        </div>
+                    </li>
+                    <p>{{experiencia.descripcionExp}}</p>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal para agregar experiencia laboral -->
+<div class="modal fade" id="agregarExperienciaModal" tabindex="-1" role="dialog"
+    aria-labelledby="agregarExperienciaModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="agregarExperienciaModalLabel">Nueva Experiencia Laboral</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="close">
+                    <span aria-hidden="true"> &times; </span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #addForm="ngForm" (ngSubmit)="onAddExperiencia(addForm)">
+                    <div class="form-group">
+                        <label for="tituloEdu">Título:</label>
+                        <input type="text" ngModel name="tituloExp" class="form-control" id="tituloExp"
+                            placeholder="Titulo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaInicioExp" class="form-control">Año de inicio:</label>
+                        <input type="text" ngModel name="fechaInicioExp" class="form-control" id="fechaInicioExp"
+                            placeholder="Año de inicio" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaFinExp" class="form-control">Año de finalización:</label>
+                        <input type="text" ngModel name="fechaFinExp" class="form-control" id="fechaFinExp"
+                            placeholder="Año de finalizacion" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcionExp" class="form-control">Descripción:</label>
+                        <textarea type="text" ngModel name="descripcionExp" class="form-control" id="descripcionExp"
+                            placeholder="Descripcion" required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="add-experiencia-form" class="btn btn-secondary"
+                            data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Cargar Experiencia Laboral</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal para Editar experiencia laboral -->
+<div class="modal fade" id="modificarExperienciaModal" tabindex="-1" role="dialog"
+    aria-labelledby="modificarExperienciaModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modificarExperienciaModalLabel">Modificar Experiencia Laboral: {{
+                    modificarExperiencia?.tituloExp }}</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="close">
+                    <span aria-hidden="true"> &times; </span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #editForm="ngForm">
+                    <div class="form-group">
+                        <label for="tituloExp">Título:</label>
+                        <input type="text" ngModel="{{ modificarExperiencia?.tituloExp }}" name="tituloExp"
+                            class="form-control" id="tituloExp" placeholder="Titulo" required>
+                    </div>
+                    <input type="hidden" ngModel="{{ modificarExperiencia?.idExp }}" name="idExp" class="form-control"
+                        id="idExp" placeholder="">
+                    <div class="form-group">
+                        <label for="fechaInicioExp" class="col-form-label">Año de inicio:</label>
+                        <input type="text" ngModel="{{ modificarExperiencia?.fechaInicioExp }}" name="fechaInicioExp"
+                            class="form-control" id="fechaInicioExp" placeholder="Año de inicio" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaFinExp" class="col-form-label">Año de finalización:</label>
+                        <input type="text" ngModel="{{ modificarExperiencia?.fechaFinExp }}" name="fechaFinExp"
+                            class="form-control" id="fechaFinExp" placeholder="Año de finalizacion" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcionExp" class="col-form-label">Descripción:</label>
+                        <textarea type="text" ngModel="{{ modificarExperiencia?.descripcionExp }}" name="descripcionExp"
+                            class="form-control" id="descripcionExp" placeholder="Descripcion" required></textarea>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" id="" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button (click)="onUpdateExperiencia(editForm.value)" data-bs-dismiss="modal"
+                            class="btn btn-primary">Modificar Experiencia</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal para Eliminar experiencia laboral -->
+<div data-bs-toggle="modale" data-bs-target="#borrarModalLabel" class="modal fade" id="borrarExperienciaModal"
+    tabindex="-1" role="dialog" aria-labelledby="borrarExperienciaModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="borrarExperienciaModalLabel">Borrar Experiencia</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="close">
+                    <span aria-hidden="true"> &times; </span>
+                </button>
+            </div>
+            <p>
+                ¿Estas seguro que deseas borrar la experiencia {{ borrarExperiencia?.tituloExp }}
+            </p>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                <button  class="btn btn-primary" data-bs-dismiss="modal" (click)="onDeleteExperiencia(borrarExperiencia.idExp)">Si</button>
+            </div>
+        </div>
     </div>
 </div>

@@ -1,6 +1,6 @@
 .row{
-    padding: 20px;
-    margin-left: 10px;
+    padding: 5px 40px 40px 40px;
+    /* margin-left: 10px; */
 }
 h1, h2, h3{
     display: inline;

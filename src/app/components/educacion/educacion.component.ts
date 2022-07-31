@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Educacion } from 'src/app/model/educacion.model';
 import { EducacionService } from 'src/app/service/educacion.service';
+import { AuthService } from 'src/app/service/auth.service';
 
 @Component({
   selector: 'app-educacion',
@@ -14,11 +15,12 @@ export class EducacionComponent implements OnInit {
   public modificarEducacion: Educacion | undefined;
   public borrarEducacion: Educacion | any;
 
-  constructor(private educacionService: EducacionService) { }
+  userLogged = this.authService.getUserLogged();
+
+  constructor(private authService: AuthService, private educacionService: EducacionService) { }
 
   ngOnInit(): void {
     this.obtenerEducacion();
-
   }
 
   public obtenerEducacion(): void{
@@ -54,7 +56,7 @@ export class EducacionComponent implements OnInit {
     document.getElementById('add-educacion-form')?.click();
     this.educacionService.agregarEducacion(addForm.value).subscribe({
       next:(response:Educacion) => {
-        console.log(response);
+        // console.log(response);
         this.obtenerEducacion();
         addForm.reset();
       },
@@ -70,7 +72,7 @@ export class EducacionComponent implements OnInit {
     document.getElementById('add-educacion-form')?.click();
     this.educacionService.editarEducacion(educacion).subscribe({
       next: (response:Educacion) => {
-        console.log(response);
+        // console.log(response);
         this.obtenerEducacion();
       },
       error:(error:HttpErrorResponse)=>{
@@ -82,7 +84,7 @@ export class EducacionComponent implements OnInit {
   public onDeleteEducacion(idEdu: number): void{
     this.educacionService.borrarEducacion(idEdu).subscribe({
       next: (response:void) => {
-        console.log(response);
+        // console.log(response);
         this.obtenerEducacion();
       },
       error:(error:HttpErrorResponse)=>{

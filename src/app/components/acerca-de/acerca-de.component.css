@@ -19,7 +19,7 @@
 
 div {
     text-align: center;
-    background-color: #457f76;
+    
 }
 
 h1,
@@ -31,4 +31,8 @@ p {
 
 h1 {
     font-weight: bold;
+}
+
+#general{
+    background-color: #457f76;
 }

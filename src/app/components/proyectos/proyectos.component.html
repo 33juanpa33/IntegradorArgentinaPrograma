@@ -1,14 +1,142 @@
-<div class="row g-0">
-    <h1>Mis Proyectos</h1>
-    <div class="container">
-        <div class="col-sm-12 col-md-6 col-lg-6 descripcion">
-            <h2>Sisteme de Reservas de Agencia de Turismo</h2>
-            <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias cupiditate esse eaque, nisi odio laborum harum distinctio expedita enim aliquam. Doloribus itaque consectetur debitis repellendus temporibus consequuntur nisi vero eligendi!
-            </p>
+<div class="row g-0 edu main-container">
+    <div *ngIf="userLogged|async as user" class="text-center">
+        <button type="button" class="btn btn-primary" (click)="onOpenModal('agregar')">
+            <a class="nav-link" style="color:white">
+                Crear Proyecto <span class="sr-only"> (current) </span>
+            </a>
+        </button>
+    </div>
+    <div id="main-container" class="row g-0">
+        <h1>Mis Proyectos</h1>
+        <div class="col-lg-11" *ngFor="let proyecto of proyectos">
+            <div class="container">
+                <div class="col-sm-12 col-md-6 col-lg-6 descripcion">
+                    <h2>{{proyecto.tituloProy}}</h2>
+                    <p>
+                        {{proyecto.descripcionProy}}
+                    </p>
+                    <div *ngIf="userLogged|async as user" class="col text-end">
+                        <a (click)="onOpenModal('modificar',proyecto)" class="btn btn-success tooltips"
+                            data-placement="top" data-toogle="tooltip" data-original-title="Editar">
+                            <i class="fa fa-pencil"></i></a>
+                        <a (click)="onOpenModal('borrar',proyecto)" class="btn btn-danger tooltips" data-placement="top"
+                            data-toogle="tooltip" data-original-title="Borrar">
+                            <i class="fa fa-trash-o"></i>
+                        </a>
+                        <!-- <a href="" class="btn btn-danger tooltips" data-placement="top" data-toogle="tooltip"
+                    data-original-title="Eliminar"><i class="fa fa-trash"></i></a> -->
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-5 col-lg-5  offset-md-1 offset-lg-1 previsualizacion">
+                    <img src={{proyecto.fotoProy}} alt="Proyecto" class="img-fluid imagen">
+                </div>
+            </div>
         </div>
-        <div class="col-sm-12 col-md-5 col-lg-5  offset-md-1 offset-lg-1 previsualizacion">
-            <img src="../../../assets/proyectoEmpresaTurismo.png" alt="ProyectoAgenciaTurismo" class="img-fluid imagen">
+    </div>
+</div>
+
+<!-- modal para agregar proyecto -->
+<div class="modal fade" id="agregarProyectoModal" tabindex="-1" role="dialog"
+    aria-labelledby="agregarProyectoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="agregarProyectoModalLabel">Nuevo Proyecto</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="close">
+                    <span aria-hidden="true"> &times; </span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #addForm="ngForm" (ngSubmit)="onAddProyecto(addForm)">
+                    <div class="form-group">
+                        <label for="tituloProy">Título:</label>
+                        <input type="text" ngModel name="tituloProy" class="form-control" id="tituloProy"
+                            placeholder="Titulo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcionProy" class="form-control">Descripción:</label>
+                        <textarea type="text" ngModel name="descripcionProy" class="form-control" id="descripcionProy"
+                            placeholder="Descripcion" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="fotoProy" class="form-control">URL imagen:</label>
+                        <input type="text" ngModel name="fotoProy" class="form-control" id="fotoProy"
+                            placeholder="Imagen Proyecto" required>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" id="add-proyecto-form" class="btn btn-secondary"
+                            data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Cargar Proyecto</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal para Editar proyecto -->
+<div class="modal fade" id="modificarProyectoModal" tabindex="-1" role="dialog"
+    aria-labelledby="modificarProyectoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modificarProyectoModalLabel">Modificar Proyecto: {{
+                    modificarProyecto?.tituloProy }}</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="close">
+                    <span aria-hidden="true"> &times; </span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #editForm="ngForm">
+                    <div class="form-group">
+                        <label for="tituloProy">Título:</label>
+                        <input type="text" ngModel="{{ modificarProyecto?.tituloProy }}" name="tituloProy"
+                            class="form-control" id="tituloProy" placeholder="Titulo" required>
+                    </div>
+                    <input type="hidden" ngModel="{{ modificarProyecto?.idProy }}" name="idProy" class="form-control"
+                        id="idProy" placeholder="">
+                    <div class="form-group">
+                        <label for="descripcionProy" class="col-form-label">Descripción:</label>
+                        <textarea type="text" ngModel="{{ modificarProyecto?.descripcionProy }}" name="descripcionProy"
+                            class="form-control" id="descripcionProy" placeholder="Descripcion" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="fotoProy" class="col-form-label">URL Imagen:</label>
+                        <input type="text" ngModel="{{ modificarProyecto?.fotoProy }}" name="fotoProy"
+                            class="form-control" id="fotoProy" placeholder="Imagen proyecto" required>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" id="" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button (click)="onUpdateProyecto(editForm.value)" data-bs-dismiss="modal"
+                            class="btn btn-primary">Modificar Proyecto</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal para Eliminar proyecto -->
+<div data-bs-toggle="modale" data-bs-target="#borrarModalLabel" class="modal fade" id="borrarProyectoModal"
+    tabindex="-1" role="dialog" aria-labelledby="borrarProyectoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="borrarProyectoModalLabel">Borrar Proyecto</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="close">
+                    <span aria-hidden="true"> &times; </span>
+                </button>
+            </div>
+            <p>
+                ¿Estas seguro que deseas borrar el proyecto {{ borrarProyecto?.tituloProy }}
+            </p>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                <button class="btn btn-primary" data-bs-dismiss="modal"
+                    (click)="onDeleteProyecto(borrarProyecto.idProy)">Si</button>
+            </div>
         </div>
     </div>
 </div>

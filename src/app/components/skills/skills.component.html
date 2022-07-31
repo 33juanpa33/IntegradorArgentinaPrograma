@@ -1,99 +1,122 @@
-<div class="row g-0">
-    <h1>Hard & Soft Skills</h1>
-    <div class="habilidad text-center">
-        <circle-progress
-            [title]="'Python'"
-            [titleColor]="'#2b554e'"
-            [showUnits]="false"
-            [showSubtitle]="false"
-            [percent]="85"
-            [radius]="80"
-            [outerStrokeWidth]="16"
-            [innerStrokeWidth]="8"
-            [outerStrokeColor]="'#457f76'"
-            [innerStrokeColor]="'#e2f4f1'"
-            [animation]="true"
-            [animationDuration]="500">
-        </circle-progress>
+<div class="row g-0 edu main-container">
+    <div *ngIf="userLogged|async as user" class="text-center">
+        <button type="button" class="btn btn-primary" (click)="onOpenModal('agregar')">
+            <a class="nav-link" style="color:white">
+                Crear Skill <span class="sr-only"> (current) </span>
+            </a>
+        </button>
     </div>
-    <div class="habilidad text-center">
-        <circle-progress
-            [title]="'Java'"
-            [titleColor]="'#2b554e'"
-            [showUnits]="false"
-            [showSubtitle]="false"
-            [percent]="80"
-            [radius]="80"
-            [outerStrokeWidth]="16"
-            [innerStrokeWidth]="8"
-            [outerStrokeColor]="'#457f76'"
-            [innerStrokeColor]="'#e2f4f1'"
-            [animation]="true"
-            [animationDuration]="500">
-        </circle-progress>
+    <div id="main-container" class="row g-0">
+        <h1>Hard & Soft Skills </h1>
+        <div class="col-lg-11 habilidad" *ngFor="let skills of skilles">
+            <div class="text-center">
+                <circle-progress [title]=skills.nombreSkill [titleColor]="'#2b554e'" [showUnits]="false"
+                    [showSubtitle]="false" [percent]="skills.porcentaje" [radius]="80" [outerStrokeWidth]="16"
+                    [innerStrokeWidth]="8" [outerStrokeColor]="'#457f76'" [innerStrokeColor]="'#e2f4f1'"
+                    [animation]="true" [animationDuration]="500">
+                </circle-progress>
+            </div>
+            <div *ngIf="userLogged|async as user" class="col text-end">
+                <a (click)="onOpenModal('modificar',skills)" class="btn btn-success tooltips" data-placement="top"
+                    data-toogle="tooltip" data-original-title="Editar">
+                    <i class="fa fa-pencil"></i></a>
+                <a (click)="onOpenModal('borrar',skills)" class="btn btn-danger tooltips" data-placement="top"
+                    data-toogle="tooltip" data-original-title="Borrar">
+                    <i class="fa fa-trash-o"></i>
+                </a>
+            </div>
+        </div>
     </div>
-    <div class="habilidad text-center">
-        <circle-progress
-            [title]="'HTML'"
-            [titleColor]="'#2b554e'"
-            [showUnits]="false"
-            [showSubtitle]="false"
-            [percent]="70"
-            [radius]="80"
-            [outerStrokeWidth]="16"
-            [innerStrokeWidth]="8"
-            [outerStrokeColor]="'#457f76'"
-            [innerStrokeColor]="'#e2f4f1'"
-            [animation]="true"
-            [animationDuration]="500">
-        </circle-progress>
+</div>
+<!-- modal para agregar skill -->
+<div class="modal fade" id="agregarSkillsModal" tabindex="-1" role="dialog" aria-labelledby="agregarSkillsModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="agregarSkillsModalLabel">Nuevo Skill</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="close">
+                    <span aria-hidden="true"> &times; </span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #addForm="ngForm" (ngSubmit)="onAddSkills(addForm)">
+                    <div class="form-group">
+                        <label for="nombreSkill">Nombre:</label>
+                        <input type="text" ngModel name="nombreSkill" class="form-control" id="nombreSkill"
+                            placeholder="Nombre Skill" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="porcentaje" class="form-control">Porcentaje:</label>
+                        <input type="text" ngModel name="porcentaje" class="form-control" id="porcentaje"
+                            placeholder="Porcentaje" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="add-skills-form" class="btn btn-secondary"
+                            data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Cargar Skill</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="habilidad text-center">
-        <circle-progress
-            [title]="'CSS'"
-            [titleColor]="'#2b554e'"
-            [showUnits]="false"
-            [showSubtitle]="false"
-            [percent]="50"
-            [radius]="80"
-            [outerStrokeWidth]="16"
-            [innerStrokeWidth]="8"
-            [outerStrokeColor]="'#457f76'"
-            [innerStrokeColor]="'#e2f4f1'"
-            [animation]="true"
-            [animationDuration]="500">
-        </circle-progress>
+</div>
+
+<!-- modal para Editar skill -->
+<div class="modal fade" id="modificarSkillsModal" tabindex="-1" role="dialog"
+    aria-labelledby="modificarSkillsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modificarSkillsModalLabel">Modificar Skill: {{
+                    modificarSkills?.nombreSkill }}</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="close">
+                    <span aria-hidden="true"> &times; </span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #editForm="ngForm">
+                    <div class="form-group">
+                        <label for="nombreSkill">Título:</label>
+                        <input type="text" ngModel="{{ modificarSkills?.nombreSkill }}" name="nombreSkill"
+                            class="form-control" id="nombreSkill" placeholder="Nombre Skill" required>
+                    </div>
+                    <input type="hidden" ngModel="{{ modificarSkills?.idSkill }}" name="idSkill" class="form-control"
+                        id="idSkill" placeholder="">
+                    <div class="form-group">
+                        <label for="porcentaje" class="col-form-label">Porcentaje:</label>
+                        <input type="text" ngModel="{{ modificarSkills?.porcentaje }}" name="porcentaje"
+                            class="form-control" id="porcentaje" placeholder="Porcentaje" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button (click)="onUpdateSkills(editForm.value)" data-bs-dismiss="modal"
+                            class="btn btn-primary">Modificar Skill</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="habilidad text-center">
-        <circle-progress
-            [title]="'JavaScript'"
-            [titleColor]="'#2b554e'"
-            [showUnits]="false"
-            [showSubtitle]="false"
-            [percent]="70"
-            [radius]="80"
-            [outerStrokeWidth]="16"
-            [innerStrokeWidth]="8"
-            [outerStrokeColor]="'#457f76'"
-            [innerStrokeColor]="'#e2f4f1'"
-            [animation]="true"
-            [animationDuration]="500">
-        </circle-progress>
-    </div>
-    <div class="habilidad text-center">
-        <circle-progress
-            [title]="['Trabajo','en equipo']"
-            [titleColor]="'#2b554e'"
-            [showUnits]="false"
-            [showSubtitle]="false"
-            [percent]="100"
-            [radius]="80"
-            [outerStrokeWidth]="16"
-            [innerStrokeWidth]="8"
-            [outerStrokeColor]="'#457f76'"
-            [innerStrokeColor]="'#e2f4f1'"
-            [animation]="true"
-            [animationDuration]="500">
-        </circle-progress>
+</div>
+<!-- modal para Eliminar skill -->
+<div data-bs-toggle="modale" data-bs-target="#borrarModalLabel" class="modal fade" id="borrarSkillsModal" tabindex="-1"
+    role="dialog" aria-labelledby="borrarSkillsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="borrarSkillsModalLabel">Borrar Skill</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="close">
+                    <span aria-hidden="true"> &times; </span>
+                </button>
+            </div>
+            <p>
+                ¿Estas seguro que deseas borrar el skill {{ borrarSkills?.nombreSkill }}
+            </p>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                <button class="btn btn-primary" data-bs-dismiss="modal"
+                    (click)="onDeleteSkills(borrarSkills.idSkill)">Si</button>
+            </div>
+        </div>
     </div>
 </div>

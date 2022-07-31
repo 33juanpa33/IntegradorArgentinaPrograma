@@ -1,6 +1,6 @@
 .row{
-    padding: 20px;
-    margin-left: 10px;
+    padding: 5px 40px 40px 40px;
+    /* margin-left: 10px; */
 }
 
 .container{
@@ -12,4 +12,7 @@
 }
 .imagen{
     box-shadow: 7px 7px 10px #2b554e;
+}
+h1{
+    background-color: #e2f4f1;
 }

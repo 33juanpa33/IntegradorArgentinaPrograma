@@ -17,7 +17,13 @@
                 <a href="https://www.linkedin.com/in/juan-pablo-alfonso/" target="_blank"><img
                         src="../../../assets/linkedin.png" alt="Linkedin" id="linkedin"></a>
             </div>
-            <button type="button" class="btn btn-outline-light" (click)="login()">Acceder</button>
+            <div></div>
+            <button type="button" *ngIf="userLogged|async as user; else btnAcceder" class="btn btn-outline-light" (click)="logout()">Cerrar Sesión</button>
+            <ng-template #btnAcceder>
+                <button type="button" class="btn btn-outline-light" (click)="login()">Acceder</button>
+            </ng-template>
+            
+            
         </div>
     </div>
 </div>

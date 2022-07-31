@@ -17,10 +17,22 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
+import { AngularFireModule } from '@angular/fire/compat';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAjT24yyhYO5k6mIqPsWBjQpVzwE4bafw0",
+  authDomain: "portfoliojuanpabloalfonso.firebaseapp.com",
+  projectId: "portfoliojuanpabloalfonso",
+  storageBucket: "portfoliojuanpabloalfonso.appspot.com",
+  messagingSenderId: "442958524826",
+  appId: "1:442958524826:web:572bfc8791686e7c3f8a23",
+  measurementId: "G-9PHVR7H67Q"
+};
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'login', component: LoginComponent }
+  { path: 'login', component: LoginComponent },
+  { path: '**', component: HomeComponent }
 ];
 
 @NgModule({
@@ -43,7 +55,8 @@ const routes: Routes = [
     NgCircleProgressModule.forRoot({}),
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    AngularFireModule.initializeApp(firebaseConfig)
   ],
   providers: [],
   bootstrap: [AppComponent]
